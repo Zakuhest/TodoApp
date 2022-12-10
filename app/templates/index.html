@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WorkShop - TodoApp</title>
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container-sm mt-5">
+        <h1 class="display-3">Todo App</h1>
+        <hr>
+
+        <div class="card p-3 shadow">
+            <form action="/add" method="post">
+                <div class="input-group mb-0">
+                    <input type="text" name="text" class="form-control" placeholder="new task...">
+                    <button class="btn btn-primary" type="submit">Add</button>
+                </div>
+            </form>
+        </div>
+        <hr>
+
+        <ul class="list-group shadow">
+            {% for task in tasks  %}
+            {% if task.deletedAt != None %}
+            <li class="list-group-item list-group-item-danger">
+                <a class="list-group-item-action" href="{{ url_for('task_router.task', id=task.id) }}">
+                    {{ task.id }} : {{ task.text }}
+                </a>
+            </li>
+            {% elif task.doneAt != None %}
+            <li class="list-group-item list-group-item-success">
+                <a class="list-group-item-action" href="{{ url_for('task_router.task', id=task.id) }}">
+                    {{ task.id }} : {{ task.text }}
+                </a>
+                <a class="btn btn-sm btn-danger float-end fw-bold" href="/delete/{{ task.id }}">&times;</a>
+            </li>
+            {% else %}
+            <li class="list-group-item">
+                <a class="list-group-item-action" href="{{ url_for('task_router.task', id=task.id) }}">
+                    {{ task.id }} : {{ task.text }}
+                </a>
+                <a class="btn btn-sm btn-danger float-end fw-bold" href="/delete/{{ task.id }}">&times;</a>
+                <span class="float-end">&nbsp;</span>
+                <form action="/done" method="post" class="d-inline">
+                    <input type="hidden" name="id" value="{{ task.id }}">
+                    <input type="hidden" name="next" value="/">
+                    <button type="submit" class="btn btn-sm btn-success float-end fw-bold">&check;</button>
+                </form>
+            </li>
+            {% endif %}
+            {% endfor  %}
+        </ul>
+    </div>
+    
+</body>
+</html>

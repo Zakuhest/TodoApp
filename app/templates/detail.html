@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task: {{ task.id }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container-sm mt-5">
+        <a href="/" class="btn btn-primary">Back</a>
+        <div class="d-flex justify-content-between">
+            <h1 class="display-4 mt-3">
+                <span id="taskId">
+                    {{ task.id }} 
+                </span> : 
+                <span id="taskText">
+                    {{ task.text }}
+                </span>
+            </h1>
+            <a class="btn btn-secondary" href="javascript: edit()">Editar</a>
+        </div>
+        <hr>
+        <p>
+            Created at: {{ task.createdAt.strftime("%H:%M:%S %d/%m/%Y") }}
+        </p>
+        {% if task.doneAt != None %}
+        <p>
+            Done at: {{ task.doneAt.strftime("%H:%M:%S %d/%m/%Y") }}
+        </p>
+        {% else %}
+            {% if task.deletedAt == None %}
+            <form action="/done" method="post">
+                <input type="hidden" name="id" value="{{ task.id }}">
+                <button type="submit" class="btn btn-success">Completed</button>
+            </form>
+            {% endif %}
+        {% endif %}
+
+        {% if task.deletedAt != None %}
+        <p>
+            Deleted at: {{ task.deletedAt.strftime("%H:%M:%S %d/%m/%Y") }}
+        </p>
+        {% else %}
+        <br>
+        <a class="btn btn-danger" href="/delete/{{ task.id }}">Delete</a>
+        {% endif %}
+    </div>
+</body>
+<script src="{{ url_for('static', filename='app.js') }}"></script>
+</html>

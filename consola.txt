@@ -1,0 +1,4 @@
+CONSOLA: 
+py -m venv myenv
+.\myenv\Scripts\activate
+pip install -r libs.txt
